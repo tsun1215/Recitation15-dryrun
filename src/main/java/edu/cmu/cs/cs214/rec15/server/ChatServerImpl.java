@@ -171,7 +171,8 @@ public class ChatServerImpl extends Thread implements ChatServer {
 
 
         private void onJoin(String username) {
-            Message msg = new Message(String.format("%s has joined the server.", username), TAG);
+            Message msg = new Message(String.format(
+                    "%s has joined the server.", username), TAG);
             synchronized (clients) {
                 for (Socket s : clients) {
                     try {
