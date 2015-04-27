@@ -7,6 +7,7 @@ import java.awt.BorderLayout;
 import java.awt.FlowLayout;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
+import java.text.SimpleDateFormat;
 
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
@@ -198,7 +199,12 @@ public class ClientPanel extends JPanel implements ClientChangeListener {
      */
     @Override
     public void messageReceived(Message msg) {
-        String newText = String.format(" %s: %s%n", msg.getSender(),
+        // Formatter for the date. See link you want to change the output format
+        // https://docs.oracle.com/javase/8/docs/api/java/text/SimpleDateFormat.html
+        // Usage: dateFormatter.format(date) -> String
+        SimpleDateFormat dateFormatter = new SimpleDateFormat("HH:mm:ss Z");
+        String newText = String.format("[%s] %s: %s%n",
+                dateFormatter.format(msg.getTimestamp()), msg.getSender(),
                 msg.getContent());
         this.chatArea.append(newText);
         chatArea.setCaretPosition(chatArea.getDocument().getLength());
