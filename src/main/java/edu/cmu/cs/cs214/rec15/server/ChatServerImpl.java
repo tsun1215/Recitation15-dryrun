@@ -171,10 +171,18 @@ public class ChatServerImpl extends Thread implements ChatServer {
 
 
         private void onJoin(String username) {
-            // TODO: Notify all clients that the given user has connected to the
-            // server. HINT: This will look very similar to onNewMessage but
-            // instead of notifying the clients of the new message, it will
-            // notify them of a joining user.
+            Message msg = new Message(String.format("%s has joined the server.", username), TAG);
+            synchronized (clients) {
+                for (Socket s : clients) {
+                    try {
+                        ObjectOutputStream out = new ObjectOutputStream(
+                                s.getOutputStream());
+                        out.writeObject(msg);
+                    } catch (IOException e) {
+                        Log.e(TAG, "Unable to send message to client.");
+                    }
+                }
+            }
         }
 
 
