@@ -14,12 +14,8 @@ public class Message implements Serializable {
     private String content;
     private Date timestamp;
     private String sender;
+    private Date serverTimestamp;
 
-
-    // TODO: Make the message also include a timestamp for when the server
-    // received the message. To implement, it is necessary to create a fields
-    // and the corresponding getter/setters. After that, it is necessary to
-    // modify the server to set a timestamp when it receives a message
 
     /**
      * Constructor to create a message
@@ -66,6 +62,26 @@ public class Message implements Serializable {
      */
     public Date getTimestamp() {
         return new Date(timestamp.getTime());
+    }
+
+
+    /**
+     * 
+     * @return Time at which the server received this message
+     */
+    public Date getServerTimestamp() {
+        return new Date(serverTimestamp.getTime());
+    }
+
+
+    /**
+     * Sets the server timestamp
+     * 
+     * @param receivedAt
+     *            Time at which the server received this message
+     */
+    public void setServerTimestamp(Date receivedAt) {
+        this.serverTimestamp = new Date(receivedAt.getTime());
     }
 
 
