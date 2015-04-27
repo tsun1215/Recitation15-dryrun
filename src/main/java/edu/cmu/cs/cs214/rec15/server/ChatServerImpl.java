@@ -147,6 +147,9 @@ public class ChatServerImpl extends Thread implements ChatServer {
             try {
                 ObjectInputStream in = new ObjectInputStream(
                         socket.getInputStream());
+                // Get worker name
+                String username = (String) in.readObject();
+                onJoin(username);
                 while (true) {
                     Message msg = (Message) in.readObject();
                     onNewMessage(socket, msg);
@@ -163,6 +166,23 @@ public class ChatServerImpl extends Thread implements ChatServer {
                     socket.close();
                 } catch (IOException e) {
                     Log.e(TAG, "Unable to close connection");
+                }
+            }
+        }
+
+
+        private void onJoin(String username) {
+            Message msg = new Message(String.format(
+                    "%s has joined the server.", username), TAG);
+            synchronized (clients) {
+                for (Socket s : clients) {
+                    try {
+                        ObjectOutputStream out = new ObjectOutputStream(
+                                s.getOutputStream());
+                        out.writeObject(msg);
+                    } catch (IOException e) {
+                        Log.e(TAG, "Unable to send message to client.");
+                    }
                 }
             }
         }
